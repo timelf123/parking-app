@@ -29,6 +29,7 @@ let SignIn = React.createClass({
     ddp.loginWithPassword(this.state.email, this.state.password)
       .then((res) => {
         if (res.loggedIn === true) {
+          this.setState({ password: '' }); // reset password field
           this.props.changeLogin(res);
         }
       });
@@ -58,6 +59,7 @@ let SignIn = React.createClass({
         />
         <TextInput
           style={styles.input}
+          value={this.state.password}
           placeholder="Password"
           placeholderTextColor="#AAA"
           autoCapitalize="none"

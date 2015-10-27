@@ -31,6 +31,7 @@ let Join = React.createClass({
           return ddp.loginWithPassword(this.state.email, this.state.password);
         })
         .then((userId) => {
+          this.setState({ password: '', confirmPassword: '' });
           this.props.changeLogin({loggedIn: true, userId: userId});
         });
     }
@@ -57,6 +58,7 @@ let Join = React.createClass({
         />
         <TextInput
           style={styles.input}
+          value={this.state.password}
           placeholder="Password"
           placeholderTextColor="#AAA"
           autoCapitalize="none"
@@ -66,6 +68,7 @@ let Join = React.createClass({
         />
         <TextInput
           style={styles.input}
+          value={this.state.confirmPassword}
           placeholder="Confirm Password"
           placeholderTextColor="#AAA"
           autoCapitalize="none"
