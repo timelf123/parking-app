@@ -1,0 +1,12 @@
+<template name="main">
+  <div class="container">
+    Contents of <code>Spots</code>:
+    <ul>
+      {{#each spots}}
+        <li><strong>{{name}}:</strong> {{occupier}}</li>
+      {{else}}
+        <li>No spots</li>
+      {{/each}}
+    </ul>
+  </div>
+</template>
