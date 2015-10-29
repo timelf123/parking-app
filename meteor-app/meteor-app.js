@@ -37,7 +37,13 @@ if (Meteor.isServer) {
     },
 
     'Spots.update': function(_id, modifier) {
-      return Spots.update(_id, modifier);
+      let spot = Spots.findOne(_id);
+      if (spot) {
+        let occupier = spot.user;
+        if (!occupier || occupier === this.userId) {
+          return Spots.update(_id, modifier);
+        }
+      }
     },
   });
 }
