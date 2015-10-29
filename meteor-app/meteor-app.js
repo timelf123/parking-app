@@ -18,7 +18,7 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(() => {
     if (Spots.find().count() === 0) {
-      Spots.insert({ name: 'eotw' });
+      Spots.insert({ name: 'main' });
       Spots.insert({ name: 'corner' });
     }
   });
