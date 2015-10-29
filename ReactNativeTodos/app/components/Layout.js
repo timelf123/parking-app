@@ -5,13 +5,12 @@ let {
   Text,
   TabBarIOS,
   Navigator,
-  Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback
+  Image
 } = React;
 
 let _ = require('underscore');
 let ddp = require('../config/ddp');
+let Button = require('./Button');
 let SignIn = require('./SignIn');
 let Join = require('./Join');
 
@@ -64,7 +63,6 @@ let Layout = React.createClass({
         this.setState({usersObserver: usersObserver});
 
         usersObserver.subscribe((results) => {
-          console.log('RES', results);
           this.setState({users: results});
         });
       });
@@ -103,6 +101,9 @@ let Layout = React.createClass({
     if (this.state.spotsObserver) {
       this.state.spotsObserver.dispose();
     }
+    if (this.state.usersObserver) {
+      this.state.usersObserver.dispose();
+    }
   },
 
   handleLogout(res) {
@@ -119,72 +120,14 @@ let Layout = React.createClass({
     this.setState(res);
   },
 
-  toggleButtonState() {
-    newState = !!!this.getOccupier()
-    if (newState) {
-      ddp.call('Spots.update', [{ name: 'eotw' }, { $set: { user: this.state.userId }}]);
-    }
-    else {
-      ddp.call('Spots.update', [{ name: 'eotw' }, { $set: { user: null }}]);
-    }
-  },
-
-  getOccupier() {
-    let spot = _.findWhere(this.state.spots, { name: 'eotw' });
-    if (spot && spot.user) {
-      let occupier = _.findWhere(this.state.users, { _id: spot.user });
-      if (occupier) {
-        return occupier.emails[0].address
-      }
-    }
-  },
-
-  renderAvailable() {
-    return (
-      <TouchableOpacity onPress={this.toggleButtonState} activeOpacity={0.85}>
-        <Image style={styles.button} source={require('image!green_button')}>
-          <Text style={styles.buttonText}>CLAIM SPOT</Text>
-        </Image>
-      </TouchableOpacity>
-    );
-  },
-
-  renderOccupied() {
-    let spot = _.findWhere(this.state.spots, { name: 'eotw' });
-    if (spot && spot.user === this.state.userId) {
-      return (
-        <TouchableOpacity onPress={this.toggleButtonState} activeOpacity={0.85}>
-          <Image style={styles.button} source={require('image!red_button')}>
-            <Text style={styles.buttonText}>RELEASE SPOT</Text>
-          </Image>
-        </TouchableOpacity>
-      );
-    }
-    else {
-      return (
-        <TouchableWithoutFeedback>
-          <Image style={styles.button} source={require('image!red_button')}>
-            <View>
-              <Text style={styles.buttonText}>TAKEN BY</Text>
-              <Text style={styles.buttonText}>{this.getOccupier()}</Text>
-            </View>
-          </Image>
-        </TouchableWithoutFeedback>
-      );
-    }
-  },
-
   renderButtons() {
-    if (this.getOccupier()) {
-      return (
-        <View style={styles.container}>{this.renderOccupied()}</View>
-      );
-    }
-    else {
-      return (
-        <View style={styles.container}>{this.renderAvailable()}</View>
-      );
-    }
+    return (
+      <View style={styles.container}>
+        {this.state.spots.map((spot, i) =>
+          <Button key={i} userId={this.state.userId} users={this.state.users} spot={spot}/>
+        )}
+      </View>
+    )
   },
 
   renderMain() {
@@ -270,18 +213,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column'
   },
-  button: {
-    width: 225,
-    height: 225,
-    backgroundColor: 'transparent'
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: 'white',
-    textAlign: 'center',
-    top: 100
-  }
 });
 
 module.exports = Layout;
