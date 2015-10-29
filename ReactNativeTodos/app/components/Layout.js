@@ -197,7 +197,9 @@ let Layout = React.createClass({
   },
 
   render() {
+    //console.log('HELLO', this.cow.moo); // throws error as expected
     if (this.state.connected) {
+      //console.log('HELLO', this.cow.moo); // does not throw error
       return this.renderNavigator();
     }
     else {
