@@ -33,7 +33,7 @@ let Join = React.createClass({
         .then((userId) => {
           this.setState({ password: '', confirmPassword: '' });
           this.props.changeLogin({loggedIn: true, userId: userId});
-        });
+        }).done();
     }
   },
 

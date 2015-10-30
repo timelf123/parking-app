@@ -46,6 +46,9 @@ let Layout = React.createClass({
           this.setState({spots: results});
         });
       });
+      // should add done() to avoid swallowing errors, but adding here causes
+      // weird INVALID_STATE_ERR error
+      //}).done();
     }
   },
 
@@ -66,6 +69,9 @@ let Layout = React.createClass({
           this.setState({users: results});
         });
       });
+      // should add done() to avoid swallowing errors, but adding here causes
+      // weird INVALID_STATE_ERR error
+      //}).done();
     }
   },
 
@@ -82,7 +88,7 @@ let Layout = React.createClass({
         state.userId= res.userId;
       }
       this.setState(state);
-    });
+    }).done();
   },
 
   componentDidUpdate() {

@@ -32,7 +32,7 @@ let SignIn = React.createClass({
           this.setState({ password: '' }); // reset password field
           this.props.changeLogin(res);
         }
-      });
+      }).done();
   },
 
   handleJoinClick() {
